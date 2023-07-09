@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+  <style>
+        #whatsapp-messages {
+            max-height: 300px; /* Set the maximum height for the messages div */
+            overflow-y: auto; /* Enable vertical scroll bar when content exceeds the height */
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Handle ChatGPT form submission
+            $('#chatgpt-form').submit(function(event) {
+                event.preventDefault();
+                var message = $('#chatgpt-message').val();
+                
+                // Send message to the server for processing by ChatGPT
+                $.ajax({
+                    url: '/chatgpt',
+                    type: 'POST',
+                    data: { message: message },
+                    success: function(response) {
+                        $('#chatgpt-response').text(response);
+                        $('#chatgpt-message').val('');
+                    }
+                });
+            });
+
+
+        $('#whatsapp-form').submit(function(event) {
+                event.preventDefault();
+                var message = $('#whatsapp-message').val();
+                var recipientId = $('#whatsapp-recipient').val(); // Get recipient ID
+                
+                // Send message and recipient ID to the server for processing by WhatsApp
+                $.ajax({
+                    url: '/whatsapp',
+                    type: 'POST',
+                    data: { message: message, recipientId: recipientId }, // Include recipient ID
+                    success: function(response) {
+                        // Process the response from WhatsApp if needed
+                        // ...
+                        $('#whatsapp-message').val('');
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    
+    <h2>WhatsApp Messages</h2>
+    <div id="whatsapp-messages">
+    <ul>
+        {% for message in whatsapp_messages %}
+            <li>
+                <strong>{{ message.sender }}:</strong> {{ message.body }}
+            </li>
+        {% endfor %}
+    </ul>
+    </div>
+    
+    <h2>Facebook Messages</h2>
+    <ul>
+        {% for message in facebook_messages %}
+            <li>
+                <strong>{{ message.sender }}:</strong> {{ message.body }}
+            </li>
+        {% endfor %}
+    </ul>
+
+ <h2>Compose Reply</h2>
+    <form action="/reply" method="POST">
+        <input type="text" name="recipient_id" placeholder="Recipient ID" required>
+        <textarea name="message" placeholder="Enter your reply" required></textarea>
+        <button type="submit">Send</button>
+    </form>
+   
+    
+    <h2>ChatGPT</h2>
+    <div id="chat-container">
+        <div id="chat-messages"></div>
+        <form id="chat-form">
+            <input type="text" id="message" placeholder="Type your message">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+    
+    <h2>ChatGPT Response</h2>
+    <div id="response"></div>
+</body>
+</html>
+

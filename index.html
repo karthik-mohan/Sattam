@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    
+    <h2>WhatsApp Messages</h2>
+    <ul>
+        {% for message in whatsapp_messages %}
+            <li>
+                <strong>{{ message.sender }}:</strong> {{ message.body }}
+            </li>
+        {% endfor %}
+    </ul>
+    
+  
+   <h2>Facebook Messages</h2>
+    <ul>
+        {% for message in facebook_messages %}
+            <li>
+                <strong>{{ message.sender }}:</strong> {{ message.body }}
+            </li>
+        {% endfor %}
+    </ul>
+        
+    <h2>Compose Reply</h2>
+    <div id="whatsapp-container">
+     
+    <form id="whatsapp-form" action="/reply" method="POST">
+        <input type="text" name="recipient_id" placeholder="Recipient ID" required>
+        <textarea name="message" placeholder="Enter your reply" required></textarea>
+        <button type="submit">Send</button>
+    </form>
+    </div>
+         
+    
+    <h2>ChatGPT</h2>
+    <div id="chat-container">
+        <div id="chat-messages"></div>
+        <form id="chat-form">
+            <input type="text" id="message" placeholder="Type your message">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+    
+    <h2>ChatGPT Response</h2>
+    <div id="chatgpt-response"></div>
+</body>
+</html>
+
+
